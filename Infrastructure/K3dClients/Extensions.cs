@@ -4,10 +4,10 @@ namespace PimsPublisher.Infrastructure.K3dClients
 {
     internal static class Extensions
     {
-        public static HttpRequestMessage WithSubcription(this HttpRequestMessage requestMessage, Subcription subcription)
+        public static HttpRequestMessage WithSubscription(this HttpRequestMessage requestMessage, Subscription subscription)
          => requestMessage
-            .WithHeader("k3d-client-id", subcription.ClientId)
-            .WithHeader("k3d-client-secret", subcription.ClientSecret);
+            .WithHeader("k3d-client-id", subscription.ClientId)
+            .WithHeader("k3d-client-secret", subscription.ClientSecret);
         
     }
 }

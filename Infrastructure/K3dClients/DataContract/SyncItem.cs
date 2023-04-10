@@ -3,6 +3,6 @@
     public class SyncItem
     {
         public List<NodeAttribute> Identifiers { get; set; }
-        public List<NodeAttribute> Propterties { get; set; }
+        public List<NodeAttribute> Properties { get; set; }
     }
 }

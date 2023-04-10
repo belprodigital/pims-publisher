@@ -4,12 +4,12 @@ using System.Net.Http.Json;
 
 namespace PimsPublisher.Infrastructure.K3dClients
 {
-    public class Subcription
+    public class Subscription
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
 
-        public Subcription(string clientId, string clientSecret)
+        public Subscription(string clientId, string clientSecret)
         {
             ClientId = clientId;
             ClientSecret = clientSecret;
@@ -17,10 +17,10 @@ namespace PimsPublisher.Infrastructure.K3dClients
     }
     public class ClientOptions
     {
-        public string HostOrigin { get; set; }
-        public string ServicePath { get; set; }
+        public string HostOrigin { get; set; } 
+        public string ServicePath { get; set; } 
 
-        public Subcription Subcription { get; set; }
+        public Subscription Subscription { get; set; }
 
         public ClientOptions(string hostOrigin, string servicePath)
         {
@@ -44,7 +44,7 @@ namespace PimsPublisher.Infrastructure.K3dClients
 
             client
                 .MakeRequest(method, string.Empty, endpoint)
-                .WithSubcription(clientOptions.Subcription);
+                .WithSubscription(clientOptions.Subscription);
 
             return client;
         }
@@ -64,7 +64,10 @@ namespace PimsPublisher.Infrastructure.K3dClients
 
             }
             else
-                throw new RestClientException($"RestClientException: HTTP_CODE → {response.StatusCode}, \n URL → {client.Request.RequestUri.ToString()}");
+            {
+                string message = $"RestClientException: HTTP_CODE → {response.StatusCode}, {Environment.NewLine} URL → {client.Request.RequestUri}";
+                throw new RestClientException(message);
+            }
         }
 
     }

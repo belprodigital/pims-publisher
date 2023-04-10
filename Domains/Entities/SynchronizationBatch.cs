@@ -11,6 +11,6 @@
 
         public int SessionTotal { get; set; }
 
-        public List<SynchronizationItem> Collections { get; set; }
+        public List<SynchronizationItem>? Collections { get; set; }
     }
 }

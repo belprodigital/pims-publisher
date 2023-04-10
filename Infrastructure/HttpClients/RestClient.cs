@@ -1,18 +1,13 @@
-﻿using System;
-using System.Net.Http;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace PimsPublisher.Infrastructure.HttpClients
 {
     internal class RestClient
     {
         private HttpClient _httpClient;
-        private HttpRequestMessage _httpRequest = null;
+        private HttpRequestMessage? _httpRequest;
 
-        public HttpRequestMessage Request { get { return _httpRequest; } }
+        public HttpRequestMessage? Request { get { return _httpRequest; } }
 
         public string ServicePath { get; private set; } 
 
