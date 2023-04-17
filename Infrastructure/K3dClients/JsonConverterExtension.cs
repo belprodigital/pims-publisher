@@ -12,6 +12,6 @@ namespace PimsPublisher.Infrastructure.K3dClients
             IgnoreReadOnlyProperties = true
         };
         internal static string ToJSON(this SynchSessionBatching synchSessionBatching)
-             => JsonSerializer.Serialize<SynchSessionBatching>(synchSessionBatching, jsonSerializerOptions);
+             => JsonSerializer.Serialize(synchSessionBatching, jsonSerializerOptions);
     }
 }

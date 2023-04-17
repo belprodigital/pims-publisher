@@ -6,7 +6,7 @@ namespace PimsPublisher.Application
     {
         Task<int> GetTotalSynchronizationItem(DateTime startTime, string projectCode, string modelCode);
 
-        Task<List<SynchronizationItem>> ListSynchronizationItems(int offset, int size);
+        Task<List<SynchronizationItem>> ListSynchronizationItems(int offset, int size, string projectCode, string modelCode);
         
     }
     

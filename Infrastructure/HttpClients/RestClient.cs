@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
+using System.Text;
 
 namespace PimsPublisher.Infrastructure.HttpClients
 {
@@ -54,6 +56,15 @@ namespace PimsPublisher.Infrastructure.HttpClients
             return _httpRequest;
         }
 
+        internal async Task<HttpRequestMessage> AuthroizeWithClientCredentialsAsync(this HttpRequestMessage requestMessage, Oauth2ClientCredential clientCredential, CancellationToken cancellationToken)
+        {
+            string accessToken = await Oauth2Client.AppAccessToken(clientCredential, cancellationToken);
+            requestMessage.WithHeader("Authorization", $"Bearer {accessToken}");
+
+            return requestMessage;
+
+        }
+
         internal async Task<HttpResponseMessage> SendAsync(CancellationToken cancellationToken)
         {
             if(_httpClient == null)
@@ -67,6 +78,17 @@ namespace PimsPublisher.Infrastructure.HttpClients
             }
 
             return await _httpClient.SendAsync(_httpRequest, cancellationToken);
+        }
+
+        internal RestClient RequestWithJsonContent(string jsonContent)
+        {
+            if (Request == null) throw new MissingMemberException("Member  -> _httpRequest is not created yet");
+            
+            if (jsonContent == null || string.IsNullOrEmpty(jsonContent)) throw new ArgumentException("JsonContent is null")
+
+            Request.WithJsonContent(jsonContent);
+
+            return this;
         }
 
         private static bool IsValidHost(string host) => Uri.IsWellFormedUriString(host, UriKind.Absolute);

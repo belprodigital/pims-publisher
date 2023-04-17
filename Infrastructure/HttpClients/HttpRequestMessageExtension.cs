@@ -13,7 +13,7 @@ namespace PimsPublisher.Infrastructure.HttpClients
             return httpRequest;
         }
 
-        public static HttpRequestMessage WithContent(this HttpRequestMessage httpRequest, string content, Encoding encoding, string mediaType)
+        private static HttpRequestMessage WithContent(this HttpRequestMessage httpRequest, string content, Encoding encoding, string mediaType)
         {
             httpRequest.Content = new StringContent(content, encoding, mediaType);
 
@@ -22,6 +22,14 @@ namespace PimsPublisher.Infrastructure.HttpClients
 
         public static HttpRequestMessage WithJsonContent(this HttpRequestMessage httpRequest, string jsonContent)
             => httpRequest.WithContent(jsonContent, Encoding.UTF8, HttpMediaType.Json);
+
+        public static HttpRequestMessage WithApplicationFormContent(this HttpRequestMessage httpRequest, Dictionary<string,string> formParams)
+        {
+            httpRequest.Content = new FormUrlEncodedContent(formParams);
+
+            return httpRequest;
+        }
+            
 
     }
 }

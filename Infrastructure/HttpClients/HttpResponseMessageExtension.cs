@@ -7,6 +7,7 @@
             if(httpResponse.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var ensureHttpStatus = httpResponse.EnsureSuccessStatusCode();
+
                 return ensureHttpStatus.IsSuccessStatusCode == true;
             }
 

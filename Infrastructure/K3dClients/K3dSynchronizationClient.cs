@@ -4,29 +4,14 @@ using System.Net.Http.Json;
 
 namespace PimsPublisher.Infrastructure.K3dClients
 {
-    public class Subscription
-    {
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-
-        public Subscription(string clientId, string clientSecret)
-        {
-            ClientId = clientId;
-            ClientSecret = clientSecret;
-        }
-    }
     public class ClientOptions
     {
         public string HostOrigin { get; set; } 
         public string ServicePath { get; set; } 
 
-        public Subscription Subscription { get; set; }
+        public string ApimSubscriptionKey { get; set; }
 
-        public ClientOptions(string hostOrigin, string servicePath)
-        {
-            HostOrigin = hostOrigin;
-            ServicePath = servicePath;
-        }
+        public Oauth2ClientCredential ClientCredential { get; set; }
     }
     public class K3dSynchronizationClient
     {
@@ -38,22 +23,23 @@ namespace PimsPublisher.Infrastructure.K3dClients
             clientOptions = options;
         }
 
-        private RestClient CreateRestClient(HttpMethod method, string endpoint) 
+        private async Task<RestClient> CreateRestClient(HttpMethod method, string endpoint) 
         {
             RestClient client = RestClient.For(clientOptions.HostOrigin, clientOptions.ServicePath);
 
-            client
-                .MakeRequest(method, string.Empty, endpoint)
-                .WithSubscription(clientOptions.Subscription);
+           var _ = await client
+                 .MakeRequest(method, string.Empty, endpoint)
+                 .WithSubscriptionKey(clientOptions.ApimSubscriptionKey)
+                 .AuthroizeWithClientCredentialsAsync(clientOptions.ClientCredential, CancellationToken.None);
 
             return client;
         }
 
         public async Task<SynchSessionStatus?> PostSingleSessionBatch(SynchSessionBatching synchSessionBatching, CancellationToken cancellationToken)
         {
-            RestClient client = CreateRestClient(HttpMethod.Post, "projects");
+            RestClient client = await CreateRestClient(HttpMethod.Post, "projects");
 
-            client.Request.WithJsonContent(synchSessionBatching.ToJSON());
+            _ = client.RequestWithJsonContent(synchSessionBatching.ToJSON());
 
             HttpResponseMessage response = await client.SendAsync(cancellationToken);
 
@@ -65,7 +51,7 @@ namespace PimsPublisher.Infrastructure.K3dClients
             }
             else
             {
-                string message = $"RestClientException: HTTP_CODE → {response.StatusCode}, {Environment.NewLine} URL → {client.Request.RequestUri}";
+                string message = $"RestClientException: HTTP_CODE → {response.StatusCode}, {Environment.NewLine} URL → {client.Request?.RequestUri}";
                 throw new RestClientException(message);
             }
         }
