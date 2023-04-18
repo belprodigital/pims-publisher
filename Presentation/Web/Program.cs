@@ -1,5 +1,6 @@
 using Hangfire;
 using Hangfire.LiteDB;
+using PimsPublisher.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddHangfire(configuration =>
 });
 
 builder.Services.AddHangfireServer();
+
+builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("publisherDbConnectionString"));
 
 
 var app = builder.Build();

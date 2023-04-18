@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Hangfire;
+using MediatR;
+using PimsPublisher.Application.Adapters;
 using PimsPublisher.Application.Cqs;
 using PimsPublisher.Domains.Entities;
 
@@ -13,25 +15,30 @@ namespace PimsPublisher.Application
 
     internal class CreateSynchronizationSessionCommandHandler : IRequestHandler<CreateSynchronizationSessionCommand, Guid>
     {
-        private readonly ISynchronizationSessionRepository _synchSessionRepository;
+        private readonly ISynchronizationRepository _synchronizationRepository;
         private readonly IPimsAttributesDataService _pimsAttributesDataService;
 
-        public CreateSynchronizationSessionCommandHandler(ISynchronizationSessionRepository synchronizationSessionRepository,IPimsAttributesDataService pimsAttributesDataService)
+        public CreateSynchronizationSessionCommandHandler(ISynchronizationRepository synchronizationSessionRepository, IPimsAttributesDataService pimsAttributesDataService)
         {
-            _synchSessionRepository = synchronizationSessionRepository;
+            _synchronizationRepository = synchronizationSessionRepository;
             _pimsAttributesDataService = pimsAttributesDataService;
         }
         public async Task<Guid> Handle(CreateSynchronizationSessionCommand cmd, CancellationToken cancellationToken)
         {
             int totalItems = await _pimsAttributesDataService.GetTotalSynchronizationItem(cmd.StartTime, cmd.ProjectCode, cmd.ModelCode);
             
-            SynchronizationSession session = SynchronizationSession.InitNewSynchronizationSession(cmd.ProjectCode, cmd.ModelCode, cmd.StartTime, totalItems);
+            SynchronizationAggregate synchronization = SynchronizationAggregate.InitNewSynchronizationSession(cmd.ProjectCode, cmd.ModelCode, cmd.StartTime, totalItems);
 
-            Guid sessionId = _synchSessionRepository.Add(session);
+            Guid syncId = _synchronizationRepository.Add(synchronization);
 
-            await _synchSessionRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            foreach(var batch in synchronization.Batches)
+            {
+               batch.JobId =  BackgroundJob.Enqueue<SynchronizationService>(service => service.PostSynchronizationBatch(batch, cancellationToken));
+            }
 
-            return sessionId;
+            await _synchronizationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            return syncId;
         }
     }
 }
