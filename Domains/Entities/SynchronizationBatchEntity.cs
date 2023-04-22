@@ -18,6 +18,8 @@
 
         public List<SynchronizationItemEntity> Items { get; set; }
 
+        public SynchronizationBatchEntity() : base(Guid.NewGuid()) { }
+
         public SynchronizationBatchEntity(string projectCode, string modelCode, int batchNo, int offset, int batchTotal, int totalItems):base(Guid.NewGuid())
         {
             ProjectCode = projectCode;

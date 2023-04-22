@@ -7,7 +7,7 @@ namespace PimsPublisher.Infrastructure.PublisherDb
 {
     internal static class MediatorExtension
     {
-        public static async Task DispatchDomainEventsAsync(this IMediator mediator, DbContext ctx, ILogger logger = null)
+        public static async Task DispatchDomainEventsAsync(this IMediator mediator, DbContext ctx, ILogger logger)
         {
             var domainEntities = ctx.ChangeTracker
                 .Entries<Entity<Guid>>()

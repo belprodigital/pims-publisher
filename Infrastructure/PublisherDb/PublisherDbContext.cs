@@ -17,11 +17,13 @@ namespace PimsPublisher.Infrastructure.PublisherDb
         public readonly IMediator _mediator;
         public readonly ILogger<PublisherDbContext> _logger;
 
-        public PublisherDbContext(DbContextOptions<PublisherDbContext> options, IMediator mediator, ILoggerFactory loggerFactory)
+        public PublisherDbContext(DbContextOptions<PublisherDbContext> options, IMediator mediator, ILoggerFactory loggerFactory):base(options)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _logger = loggerFactory?.CreateLogger<PublisherDbContext>() ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
+
+        public PublisherDbContext(DbContextOptions<PublisherDbContext> options):base(options) { }
 
         public async Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {

@@ -14,6 +14,8 @@
         public DateTime UpdatedAt { get; set; }
         public IList<SynchronizationBatchEntity> Batches { get; set; }
 
+        public SynchronizationAggregate():base(Guid.NewGuid()) { }
+
         private SynchronizationAggregate(string projectCode, string modelCode, int totalItems, DateTime startTime)
             :base(Guid.NewGuid())
         {
@@ -24,15 +26,14 @@
             Status = "START";
             TotalItems = totalItems;
             TotalSubmitted = 0;
-            BatchSize = 1000;
+            BatchSize = 2;
             Batches = new List<SynchronizationBatchEntity>();
         }
 
         private void CalculationTotalBatch()
         {
             if (TotalItems > BatchSize) TotalBatch = TotalItems % BatchSize > 0 ? TotalItems / BatchSize + 1 : TotalItems / BatchSize;
-
-            TotalBatch =  1;
+            else TotalBatch =  1;
         }
 
         private void CreateSynchronizationBatches()

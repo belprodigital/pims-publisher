@@ -8,6 +8,8 @@
 
         public SynchronizationRecord SyncRecord { get; set; }
 
+        public SynchronizationItemEntity() : base(Guid.NewGuid()) { }
+
         private SynchronizationItemEntity(Guid syncId, Guid batchId, int batchNo, SynchronizationRecord record) : base(Guid.NewGuid())
         {
             SyncId = syncId;

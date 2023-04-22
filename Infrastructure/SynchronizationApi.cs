@@ -17,8 +17,8 @@ namespace PimsPublisher.Infrastructure
 
         public async Task<Domains.Entities.SynchronizationStatus> PostASynchronizationBatch(SynchronizationBatchEntity batch, CancellationToken cancellationToken)
         {
-            var status = await api.PostForAppAsync<SynchSessionBatching, K3dClients.DataContract.SynchronizationStatus>("k3dAPi", batch.ToContractModel());
-            
+            var status = await api.PostForAppAsync<SynchSessionBatching, K3dClients.DataContract.SynchronizationStatus>("K3dApim", batch.ToContractModel());
+
             return status?.ToSynchronizationStatusEntity() ?? new Domains.Entities.SynchronizationStatus();
         }
     }
