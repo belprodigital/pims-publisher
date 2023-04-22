@@ -1,4 +1,6 @@
-﻿namespace PimsPublisher.Domains.Entities
+﻿using PimsPublisher.Domains.Events;
+
+namespace PimsPublisher.Domains.Entities
 {
     public class SynchronizationAggregate : Entity<Guid>, IAggregateRoot
     {
@@ -50,7 +52,7 @@
 
                 }
 
-                Batches.Add(new SynchronizationBatchEntity(ProjectCode, ModelCode, batchNo, offset, batchTotal, TotalItems)); 
+                Batches.Add(SynchronizationBatchEntity.For(ProjectCode, ModelCode, batchNo, offset, batchTotal, TotalItems).WithDomainEvent()); 
             }
         }
         

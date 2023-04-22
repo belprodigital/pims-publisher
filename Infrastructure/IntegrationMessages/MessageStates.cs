@@ -1,4 +1,4 @@
-﻿namespace PimsPublisher.Infrastructure.MessageLog
+﻿namespace PimsPublisher.Infrastructure.IntegrationMessages
 {
     public enum MessageStates
     {

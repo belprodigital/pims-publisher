@@ -3,7 +3,7 @@ using PimsPublisher.Domains.Entities;
 using PimsPublisher.Application.Adapters;
 using PimsPublisher.Infrastructure.K3dClients.DataContract;
 
-namespace PimsPublisher.Infrastructure
+namespace PimsPublisher.Infrastructure.K3dClients
 {
     public class SynchronizationApi : ISynchronizationApi
     {
@@ -17,7 +17,7 @@ namespace PimsPublisher.Infrastructure
 
         public async Task<Domains.Entities.SynchronizationStatus> PostASynchronizationBatch(SynchronizationBatchEntity batch, CancellationToken cancellationToken)
         {
-            var status = await api.PostForAppAsync<SynchSessionBatching, K3dClients.DataContract.SynchronizationStatus>("K3dApim", batch.ToContractModel());
+            var status = await api.PostForAppAsync<SynchSessionBatching, DataContract.SynchronizationStatus>("K3dApim", batch.ToContractModel());
 
             return status?.ToSynchronizationStatusEntity() ?? new Domains.Entities.SynchronizationStatus();
         }

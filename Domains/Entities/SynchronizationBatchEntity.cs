@@ -1,4 +1,6 @@
-﻿namespace PimsPublisher.Domains.Entities
+﻿using PimsPublisher.Domains.Events;
+
+namespace PimsPublisher.Domains.Entities
 {
     public class SynchronizationBatchEntity: Entity<Guid>
     {
@@ -20,7 +22,7 @@
 
         public SynchronizationBatchEntity() : base(Guid.NewGuid()) { }
 
-        public SynchronizationBatchEntity(string projectCode, string modelCode, int batchNo, int offset, int batchTotal, int totalItems):base(Guid.NewGuid())
+        private SynchronizationBatchEntity(string projectCode, string modelCode, int batchNo, int offset, int batchTotal, int totalItems):base(Guid.NewGuid())
         {
             ProjectCode = projectCode;
             ModelCode = modelCode;
@@ -30,5 +32,15 @@
             SyncTotal = totalItems;
             Items = new List<SynchronizationItemEntity>();
         }
+
+        public SynchronizationBatchEntity WithDomainEvent()
+        {
+            AddDomainEvent(SynchronizationBatchCreatedEvent.For(this));
+
+            return this;
+        }
+
+        public static SynchronizationBatchEntity For(string projectCode, string modelCode, int batchNo, int offset, int batchTotal, int totalItems)
+            => new SynchronizationBatchEntity(projectCode, modelCode, batchNo, offset, batchTotal, totalItems);
     }
 }

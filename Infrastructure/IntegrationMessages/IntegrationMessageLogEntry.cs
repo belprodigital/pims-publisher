@@ -1,10 +1,10 @@
-﻿using System;
+﻿using PimsPublisher.Application.Integrations;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Expenses.Application.Messages;
 
-namespace PimsPublisher.Infrastructure.MessageLog
+namespace PimsPublisher.Infrastructure.IntegrationMessages
 {
     public class IntegrationMessageLogEntry
     {

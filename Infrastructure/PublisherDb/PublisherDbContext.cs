@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using PimsPublisher.Domains;
 using PimsPublisher.Domains.Entities;
 using PimsPublisher.Infrastructure.PublisherDb.Configurations;
+using System.Data;
+using System.Data.Common;
 
 namespace PimsPublisher.Infrastructure.PublisherDb
 {
@@ -14,9 +17,11 @@ namespace PimsPublisher.Infrastructure.PublisherDb
         public virtual DbSet<SynchronizationBatchEntity> SynchronizationBatches { get; set; }
         public virtual DbSet<SynchronizationItemEntity> SynchronizationItems { get; set; }
 
-        private IDbContextTransaction _currentTransaction;
         private readonly IMediator _mediator;
         private readonly ILogger<PublisherDbContext> _logger;
+
+        private IDbContextTransaction? _currentTransaction;
+        public bool HasActiveTransaction => _currentTransaction != null;
 
         public PublisherDbContext(DbContextOptions<PublisherDbContext> options, IMediator mediator, ILoggerFactory loggerFactory):base(options)
         {

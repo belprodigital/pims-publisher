@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace PimsPublisher.Infrastructure.MessageLog
+namespace PimsPublisher.Infrastructure.IntegrationMessages
 {
     public class IntegrationMessageLogContext : DbContext
     {

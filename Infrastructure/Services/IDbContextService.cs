@@ -1,16 +1,14 @@
-using System.Data.Common;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Data.Common;
 
-namespace PimsPublisher.Application.Adapters
-{ 
+namespace PimsPublisher.Infrastructure
+{
     public interface IDbContextService
     {
-        IDbContextTransaction GetCurrentTransaction() ;
+        IDbContextTransaction GetCurrentTransaction();
         DbConnection GetDbConnection();
         Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
         Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken);
     }
-    
+
 }

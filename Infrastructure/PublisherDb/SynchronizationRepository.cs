@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using PimsPublisher.Application.Adapters;
 using PimsPublisher.Domains;
 using PimsPublisher.Domains.Entities;

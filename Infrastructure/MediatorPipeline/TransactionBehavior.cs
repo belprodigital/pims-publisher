@@ -1,20 +1,21 @@
-using System;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using PimsPublisher.Domains.Commons;
+using PimsPublisher.Application.Services;
+using PimsPublisher.Infrastructure.PublisherDb;
 
-namespace PimsPublisher.Infrastructure.Behaviors
+
+namespace PimsPublisher.Infrastructure.MediatorPipeline
 {
     public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly ILogger<TransactionBehavior<TRequest, TResponse>> _logger;
-        private readonly ExpenseDbContext _dbContext;
-        private readonly IIntegrationMessageService _integrationEventService;
+        private readonly PublisherDbContext _dbContext;
+        private readonly IIntegrationService _integrationEventService;
 
-        public TransactionBehavior(ExpenseDbContext dbContext,
-            IIntegrationMessageService integrationEventService,
+        public TransactionBehavior(PublisherDbContext dbContext,
+            IIntegrationService integrationEventService,
             ILogger<TransactionBehavior<TRequest, TResponse>> logger)
         {
             _dbContext = dbContext ?? throw new ArgumentException(nameof(dbContext));
@@ -22,13 +23,13 @@ namespace PimsPublisher.Infrastructure.Behaviors
             _logger = logger ?? throw new ArgumentException(nameof(ILogger));
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             var response = default(TResponse);
-            
+
             var typeName = request.GetGenericTypeName();
 
-            if(request is Application.Commons.IQuery<TResponse>)
+            if (request is Application.Cqs.IQuery<TResponse>)
             {
                 return await next();
             }

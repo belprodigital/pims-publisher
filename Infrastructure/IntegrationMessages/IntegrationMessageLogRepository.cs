@@ -1,20 +1,14 @@
-﻿using Expenses.Application.Messages;
-using Expenses.Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using PimsPublisher.Application.Integrations;
 
-namespace PimsPublisher.Infrastructure.MessageLog
+namespace PimsPublisher.Infrastructure.IntegrationMessages
 {
-    public class IntegrationMessageLogService : IMessageLogService, IDisposable
+    public class IntegrationMessageLogRepository : IIntegrationMessageLogRepository, IDisposable
     {
         private readonly IntegrationMessageLogContext _integrationMessageLogContext;
         private readonly List<Type> _messageTypes;
@@ -22,7 +16,7 @@ namespace PimsPublisher.Infrastructure.MessageLog
 
         public ILoggerFactory LoggerFactory { get; }
 
-        public IntegrationMessageLogService(DbConnection dbConnection, ILoggerFactory loggerFactory)
+        public IntegrationMessageLogRepository(DbConnection dbConnection, ILoggerFactory loggerFactory)
         {
             DbConnection _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
             LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
