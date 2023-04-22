@@ -24,6 +24,7 @@ namespace PimsPublisher.Infrastructure
 
             services
                 .AddPublisherDbContext(Configuration.GetConnectionString(publisherConnectionName))
+                .AddIntegrationEventStorage()
                 .AddScoped<IPimsAttributesDataService, PimsAttributesDataService>()
                 .AddScoped<ISynchronizationRepository, SynchronizationRepository>()
                 .AddScoped<ISynchronizationApi, SynchronizationApi>();
