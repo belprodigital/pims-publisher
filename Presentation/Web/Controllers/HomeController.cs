@@ -33,11 +33,11 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public IActionResult StartSynch(string btnValue)
+    public async Task<IActionResult> StartSynch(string btnValue)
     {
         TempData["synchronizationInfo"] = $"New Synchronization has stated at {DateTime.Now.ToUniversalTime()}";
 
-        _mediator.Send(CreateSynchronizationSessionCommand.For(projectCode: "0230", modelCode:"Q0230-shop-str"));
+       await _mediator.Send(CreateSynchronizationCommand.For(projectCode: "0230", modelCode:"Q0230-shop-str"));
 
         return View();
     }

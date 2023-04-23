@@ -27,7 +27,7 @@ namespace PimsPublisher.Infrastructure.PublisherDb
 
         public async Task<SynchronizationAggregate?> GetSynchronization(Guid syncId, CancellationToken cancellationToken)
         {
-            return await _publisherDbContext.Synchronizations.FirstOrDefaultAsync(s => s.Id == syncId, cancellationToken);
+            return await _publisherDbContext.Synchronizations.Include(s => s.Batches).FirstOrDefaultAsync(s => s.Id == syncId, cancellationToken);
         }
     }
 }

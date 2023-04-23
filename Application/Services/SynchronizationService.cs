@@ -1,7 +1,7 @@
 ﻿using PimsPublisher.Application.Adapters;
 using PimsPublisher.Domains.Entities;
 
-namespace PimsPublisher.Application
+namespace PimsPublisher.Application.Services
 {
     public class SynchronizationService
     {
@@ -24,7 +24,7 @@ namespace PimsPublisher.Application
             var status = await _synchronizationApi.PostASynchronizationBatch(batch, cancellationToken);
 
             var synchronization = await _synchronizationRepository.GetSynchronization(batch.SyncId, cancellationToken) ?? throw new InvalidOperationException($"Synchronization Not found: {batch.SyncId}");
-           
+
             var currentBatch = synchronization.Batches.First(b => b.Id == batch.Id);
 
             currentBatch.Items = batch.Items;

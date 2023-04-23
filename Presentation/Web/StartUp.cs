@@ -1,5 +1,6 @@
 ﻿using Hangfire;
-using Hangfire.LiteDB;
+using Hangfire.SqlServer;
+using Microsoft.Extensions.Configuration;
 using PimsPublisher.Application;
 using PimsPublisher.Infrastructure;
 
@@ -23,9 +24,10 @@ namespace PimsPublisher.Web
             // Add services to the container.
             services.AddControllersWithViews();
 
+
             services.AddHangfire(cfg =>
             {
-                cfg.UseLiteDbStorage("./hf.db");
+                cfg.UseSqlServerStorage(Configuration.GetConnectionString("hangfiredbConnectionString"));
             });
 
             services.AddHangfireServer();

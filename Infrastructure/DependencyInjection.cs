@@ -9,6 +9,7 @@ using PimsPublisher.Infrastructure.PublisherDb;
 using PimsPublisher.Infrastructure.K3dClients;
 using PimsPublisher.Infrastructure.IntegrationMessages;
 using PimsPublisher.Infrastructure.MediatorPipeline;
+using PimsPublisher.Infrastructure.JobWorker;
 
 namespace PimsPublisher.Infrastructure
 {
@@ -30,6 +31,7 @@ namespace PimsPublisher.Infrastructure
 
             services
                 .AddPublisherDb(Configuration.GetConnectionString(publisherConnectionName))
+                .AddWorkerService()
                 .AddIntegrationEventStorage()
                 .TransactionBehavior()
                 .AddScoped<IPimsAttributesDataService, PimsAttributesDataService>();

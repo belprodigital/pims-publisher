@@ -17,6 +17,8 @@ namespace PimsPublisher.Application.Integrations
         public int BatchTotal { get; set; }
         public int SyncTotal { get; set; }
 
+        public SynchronizationBatchJobMessage() { }
+
 
         private SynchronizationBatchJobMessage(SynchronizationBatchEntity batchEntity)
         {

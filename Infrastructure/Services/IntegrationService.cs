@@ -44,7 +44,7 @@ namespace PimsPublisher.Infrastructure.Services
                     await _integrationMessageLogRepository.MarkMessageAsInProgressAsync(msg.Id, cancellationToken);
                     if(msg is IJobMessage)
                     {
-                        await _jobWorkerService.CreateJobForMessage(msg, msg.GetType());
+                        await _jobWorkerService.CreateJobForMessage(msg, msg.GetType(), cancellationToken);
                     }
                     
 

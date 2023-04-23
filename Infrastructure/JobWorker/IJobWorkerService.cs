@@ -6,6 +6,6 @@ namespace PimsPublisher.Infrastructure.JobWorker
 {
     public interface IJobWorkerService
     {
-        public Task CreateJobForMessage(IMessage messsage, Type messageType);
+        public Task<string> CreateJobForMessage(IMessage messsage, Type messageType, CancellationToken cancellationToken);
     }
 }

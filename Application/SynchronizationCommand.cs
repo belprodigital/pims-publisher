@@ -6,35 +6,35 @@ using PimsPublisher.Domains.Entities;
 
 namespace PimsPublisher.Application
 {
-    public class CreateSynchronizationSessionCommand : ICommand<Guid>
+    public class CreateSynchronizationCommand : ICommand<Guid>
     {
         public DateTime StartTime { get; set; } = DateTime.Now;
         public string ProjectCode { get; set; } = string.Empty;
         public string ModelCode { get; set; } = string.Empty;
 
-        private CreateSynchronizationSessionCommand(string projectCode, string modelCode)
+        private CreateSynchronizationCommand(string projectCode, string modelCode)
         {
             StartTime = DateTime.Now;
             ProjectCode = projectCode;
             ModelCode = modelCode;
         }
-        public static CreateSynchronizationSessionCommand For(string projectCode, string modelCode)
+        public static CreateSynchronizationCommand For(string projectCode, string modelCode)
         {
-             return new CreateSynchronizationSessionCommand(projectCode, modelCode);
+             return new CreateSynchronizationCommand(projectCode, modelCode);
         }
     }
 
-    internal class CreateSynchronizationSessionCommandHandler : IRequestHandler<CreateSynchronizationSessionCommand, Guid>
+    internal class CreateSynchronizationCommandHandler : IRequestHandler<CreateSynchronizationCommand, Guid>
     {
         private readonly ISynchronizationRepository _synchronizationRepository;
         private readonly IPimsAttributesDataService _pimsAttributesDataService;
 
-        public CreateSynchronizationSessionCommandHandler(ISynchronizationRepository synchronizationSessionRepository, IPimsAttributesDataService pimsAttributesDataService)
+        public CreateSynchronizationCommandHandler(ISynchronizationRepository synchronizationSessionRepository, IPimsAttributesDataService pimsAttributesDataService)
         {
             _synchronizationRepository = synchronizationSessionRepository;
             _pimsAttributesDataService = pimsAttributesDataService;
         }
-        public async Task<Guid> Handle(CreateSynchronizationSessionCommand cmd, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateSynchronizationCommand cmd, CancellationToken cancellationToken)
         {
             int totalItems = await _pimsAttributesDataService.GetTotalSynchronizationItem(cmd.StartTime, cmd.ProjectCode, cmd.ModelCode);
             
@@ -43,6 +43,7 @@ namespace PimsPublisher.Application
             Guid syncId = _synchronizationRepository.Add(synchronization);
 
             await _synchronizationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
             //foreach (var batch in synchronization.Batches)
             //{
             //    batch.JobId = BackgroundJob.Enqueue<SynchronizationService>(service => service.PostSynchronizationBatch(batch, cancellationToken));
