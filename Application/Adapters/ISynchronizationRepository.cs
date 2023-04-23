@@ -7,5 +7,8 @@ namespace PimsPublisher.Application.Adapters
     {
         Guid Add(SynchronizationAggregate synchronization);
         Task<SynchronizationAggregate?> GetSynchronization(Guid syncId, CancellationToken cancellationToken);
+        Task<SynchronizationBatchEntity?> GetBatchEntity(Guid batchId, CancellationToken cancellationToken);
+        Task<SynchronizationBatchEntity> AddListItemToBatch(Guid batchId, List<SynchronizationItemEntity> synchronizationItems);
+
     }
 }

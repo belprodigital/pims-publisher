@@ -35,10 +35,6 @@ namespace PimsPublisher.Infrastructure.PublisherDb.Configurations
             builder.Property(e => e.SyncTotal)
                 .IsRequired();
 
-            builder.Property(e => e.JobId)
-                .HasMaxLength(50)
-                .IsRequired();
-
             builder.HasMany(e => e.Items)
                 .WithOne()
                 .HasForeignKey(e => new { e.BatchId });

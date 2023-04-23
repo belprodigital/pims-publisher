@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using PimsPublisher.Application.Adapters;
 using PimsPublisher.Application.Integrations;
 using PimsPublisher.Domains.Entities;
+using PimsPublisher.Infrastructure.K3dClients.DataContract;
+using PimsPublisher.Infrastructure.PublisherDb;
 
 namespace PimsPublisher.Infrastructure.JobWorker.JobHandlers
 {
@@ -31,29 +33,18 @@ namespace PimsPublisher.Infrastructure.JobWorker.JobHandlers
         {
             _logger.LogTrace("Run Hangifire Job for Message {0} {1}", jobMessage.GetType().Name, jobMessage.Id);
 
-            if(jobMessage is SynchronizationBatchJobMessage)
+            var items = await _pimsAttributesDataService.ListSynchronizationItems(jobMessage.Offset, jobMessage.BatchTotal, jobMessage.ProjectCode, jobMessage.ModelCode);
+            var itemEntities = items.Select(i => SynchronizationItemEntity.For(jobMessage.SyncId, jobMessage.BatchId, jobMessage.BatchNo, i)).ToList();
+
+            SynchronizationBatchEntity? batchEntity = await _synchronizationRepository.AddListItemToBatch(jobMessage.BatchId, itemEntities);
+
+            if(batchEntity == null)
             {
-                SynchronizationBatchJobMessage syncBatchMsg = (SynchronizationBatchJobMessage)jobMessage;
-
-                var synchronization = await _synchronizationRepository.GetSynchronization(syncBatchMsg.SyncId, cancellationToken) ?? throw new InvalidOperationException($"Synchronization Not found: {syncBatchMsg.SyncId}");
-                
-                var batch = synchronization.Batches.First(b => b.Id == syncBatchMsg.BatchId);
-
-                var items = await _pimsAttributesDataService.ListSynchronizationItems(syncBatchMsg.Offset, syncBatchMsg.BatchTotal, syncBatchMsg.ProjectCode, syncBatchMsg.ModelCode);
-
-                var Items = items.Select(i => SynchronizationItemEntity.For(syncBatchMsg.SyncId, syncBatchMsg.Id, syncBatchMsg.BatchNo, i)).ToList();
-
-                batch.Items = Items;
-
-                var status = await _synchronizationApi.PostASynchronizationBatch(batch, cancellationToken);
-
-                await _synchronizationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
+                throw new InvalidOperationException($"Not Found Batch {jobMessage.BatchId} to execute function");
             }
-            else
-            {
-                throw new InvalidOperationException($"{nameof(jobMessage)} is NOT an implementation of type {typeof(SynchronizationBatchJobMessage).Name}");
-            }
+
+
+            var status = await _synchronizationApi.PostASynchronizationBatch(batchEntity, cancellationToken);
         }
     }
 }
