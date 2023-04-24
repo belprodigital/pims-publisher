@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PimsPublisher.Web", "Presentation\Web\PimsPublisher.Web.csproj", "{4A0B491C-7C6F-4D75-89FB-7D52E6F031D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PimsPublisher.Domains", "Domains\PimsPublisher.Domains.csproj", "{80170A8A-C2A9-40DC-A5F7-8EC289EEF59F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{4A0B491C-7C6F-4D75-89FB-7D52E6F031D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A0B491C-7C6F-4D75-89FB-7D52E6F031D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A0B491C-7C6F-4D75-89FB-7D52E6F031D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80170A8A-C2A9-40DC-A5F7-8EC289EEF59F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80170A8A-C2A9-40DC-A5F7-8EC289EEF59F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80170A8A-C2A9-40DC-A5F7-8EC289EEF59F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80170A8A-C2A9-40DC-A5F7-8EC289EEF59F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4A0B491C-7C6F-4D75-89FB-7D52E6F031D6} = {2252C42C-20BD-4321-B788-84E9267387EF}

@@ -1,16 +1,20 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using PimsPublisher.Application;
 using PimsPublisher.Web.Models;
+using MediatR;
 
 namespace PimsPublisher.Web.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IMediator _mediator;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IMediator mediator)
     {
         _logger = logger;
+        _mediator = mediator; 
     }
 
     public IActionResult Index()
@@ -27,5 +31,14 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    public async Task<IActionResult> StartSynch(string btnValue)
+    {
+        TempData["synchronizationInfo"] = $"New Synchronization has stated at {DateTime.Now.ToUniversalTime()}";
+
+       await _mediator.Send(CreateSynchronizationCommand.For(projectCode: "0230", modelCode:"Q0230-shop-str"));
+
+        return View();
     }
 }
