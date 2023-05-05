@@ -40,9 +40,11 @@ namespace PimsPublisher.Domains.Entities
 
         private void CreateSynchronizationBatches()
         {
-            for(int batchNo = 0; batchNo < TotalBatch; batchNo++)
+            //batchNo start by 1
+            //offset start by 0
+            for(int batchNo = 1; batchNo <= TotalBatch; batchNo++)
             {
-                int offset = batchNo * BatchSize;
+                int offset = (batchNo - 1) * BatchSize;
                 int batchTotal = BatchSize;
 
                 if(offset > TotalItems)
