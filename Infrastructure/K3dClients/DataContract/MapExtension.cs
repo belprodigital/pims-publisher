@@ -10,7 +10,7 @@ namespace PimsPublisher.Infrastructure.K3dClients.DataContract
         
         internal static SyncItem ToApiContract(this SynchronizationRecord synchronizationItem)
             => new SyncItem { 
-                Identifiers = synchronizationItem.Keys.Select(x => x.ToNodeAttribute()).ToList(),
+                Keys = synchronizationItem.Keys.Select(x => x.ToNodeAttribute()).ToList(),
                 Properties = synchronizationItem.Propterties.Select(x => x.ToNodeAttribute()).ToList()
             };
 
@@ -24,7 +24,7 @@ namespace PimsPublisher.Infrastructure.K3dClients.DataContract
             BatchNo = batchEntity.BatchNo,
             BatchTotal = batchEntity.BatchTotal,
             Offset = batchEntity.Offset,
-            SessionTotalData = batchEntity.SyncTotal,
+            SessionTotal = batchEntity.SyncTotal,
             Collections = batchEntity.Items.ToApiContractItems() };
 
        internal static Domains.Entities.SynchronizationStatus ToSynchronizationStatusEntity(this SynchronizationStatus syncStatus)

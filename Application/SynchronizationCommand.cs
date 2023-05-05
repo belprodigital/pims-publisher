@@ -44,11 +44,6 @@ namespace PimsPublisher.Application
 
             await _synchronizationRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-            //foreach (var batch in synchronization.Batches)
-            //{
-            //    batch.JobId = BackgroundJob.Enqueue<SynchronizationService>(service => service.PostSynchronizationBatch(batch, cancellationToken));
-            //}
-
             return syncId;
         }
     }
