@@ -1,10 +1,7 @@
-﻿using Hangfire.Logging;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using PimsPublisher.Application.Adapters;
 using PimsPublisher.Application.Integrations;
 using PimsPublisher.Domains.Entities;
-using PimsPublisher.Infrastructure.K3dClients.DataContract;
-using PimsPublisher.Infrastructure.PublisherDb;
 
 namespace PimsPublisher.Infrastructure.JobWorker.JobHandlers
 {
@@ -34,6 +31,7 @@ namespace PimsPublisher.Infrastructure.JobWorker.JobHandlers
             _logger.LogTrace("Run Hangifire Job for Message {0} {1}", jobMessage.GetType().Name, jobMessage.Id);
 
             var items = await _pimsAttributesDataService.ListSynchronizationItems(jobMessage.Offset, jobMessage.BatchTotal, jobMessage.ProjectCode, jobMessage.ModelCode);
+
             var itemEntities = items.Select(i => SynchronizationItemEntity.For(jobMessage.SyncId, jobMessage.BatchId, jobMessage.BatchNo, i)).ToList();
 
             SynchronizationBatchEntity? batchEntity = await _synchronizationRepository.AddListItemToBatch(jobMessage.BatchId, itemEntities);

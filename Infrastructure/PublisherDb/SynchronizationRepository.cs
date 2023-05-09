@@ -40,12 +40,16 @@ namespace PimsPublisher.Infrastructure.PublisherDb
         public async Task<SynchronizationBatchEntity> AddListItemToBatch(Guid batchId, List<SynchronizationItemEntity> synchronizationItems)
         {
             var batchentity = await _publisherDbContext.SynchronizationBatches.Include(b => b.Items).FirstOrDefaultAsync(b => b.Id == batchId);
-            if (batchentity != null && batchentity.Items.Any() == false)
+
+            if(batchentity == null) 
+            {
+                throw new InvalidOperationException("Not Found SynchronizationBatch to add items");
+            }
+
+            if (batchentity.Items.Any() == false)
             {
                 await _publisherDbContext.SynchronizationItems.AddRangeAsync(synchronizationItems);
                 await _publisherDbContext.SaveChangesAsync();
-
-                batchentity.Items.AddRange(synchronizationItems);
             }
 
 
