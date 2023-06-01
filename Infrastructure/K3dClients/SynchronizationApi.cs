@@ -35,7 +35,7 @@ namespace PimsPublisher.Infrastructure.K3dClients
 
             var status = await api.PostForAppAsync<SynchSessionBatching, DataContract.SynchronizationStatus>("K3dApim", batchModel, overrideOption =>
             {
-                overrideOption.RelativePath = $"api/core/synchronization/projects/{batch.ProjectCode}/models/{batch.ModelCode}/session/{batch.SyncId}";
+                overrideOption.RelativePath = $"api/core/synchronization/projects/{batch.ProjectCode}/session/{batch.SyncId}";
                 overrideOption.Serializer = modelSerializer;
 
             });
